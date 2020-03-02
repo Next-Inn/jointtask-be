@@ -1,0 +1,1 @@
+[![CircleCI](https://circleci.com/bb/kodehauzteam/mediamall-backend.svg?style=svg)](https://circleci.com/bb/kodehauzteam/mediamall-backend)

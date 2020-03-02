@@ -1,0 +1,55 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:10.16.0
+      - image: redis
+      - image: kartoza/postgis:9.6-2.4
+    working_directory: ~/mediamall
+    environment:
+      NODE_ENV: test
+      DATABASE_URL_TEST: postgresql://docker:docker@localhost/gis
+      HEROKU_API_KEY: a0c32f46-0ada-4c9f-9fc6-8ca44cd0b415
+      HEROKU_APP_NAME: mediamall
+    steps:
+      - checkout
+      - run: sudo apt-get update
+      - run: sudo apt-get install postgresql-client-9.6
+      - run: whoami
+      - run: npm install
+      # - run: npm test
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: install-npm-wee
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run: # run tests
+          name: test
+          command: npm run test-a
+      - run: # run coverage report
+          name: code-coverage
+          command: npm run coverage
+      - store_artifacts: # special step to save test results as as artifact
+          # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
+          path: test-results
+          prefix: tests
+      - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
+          path: coverage
+          prefix: coverage
+      - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
+          path: test-results
+      - run: # test what branch we're on.
+          name: "What branch am I on?"
+          command: echo ${CIRCLE_BRANCH}
+      - run: # deploy to heroku
+          name: deploy
+          command: |
+            if [${CIRCLE_BRANCH} = "dev"]
+            then
+              git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git ${CIRCLE_BRANCH}:master
+            fi     
+         
