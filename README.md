@@ -1,5 +1,5 @@
 Jointtaskfondation. An MLM web app.
-=======
+Joint task is a basic MLM platform
 [![CircleCI](https://circleci.com/bb/kodehauzteam/mediamall-backend.svg?style=svg)](https://circleci.com/bb/kodehauzteam/mediamall-backend)
 ---
 
@@ -33,3 +33,5 @@ Jointtaskfondation. An MLM web app.
 - [Tochuckwu Ozurumba](https://github.com/tueloper)
 
 `#`NextInn @ 2020
+=======
+# jointtask-be
