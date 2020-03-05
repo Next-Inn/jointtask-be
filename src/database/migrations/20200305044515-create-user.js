@@ -38,6 +38,18 @@ module.exports = {
 			},
 			ref_uuid: Sequelize.UUID,
 			referer_uuid: Sequelize.UUID,
+			verified: {
+				type: Sequelize.BOOLEAN,
+				defaultValue: false
+			},
+			role: {
+				type: Sequelize.ENUM,
+				values: [
+					'user',
+					'admin'
+				],
+				defaultValue: 'user'
+			},
 			createdAt: {
 				allowNull: false,
 				type: Sequelize.DATE

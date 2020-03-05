@@ -42,7 +42,12 @@ module.exports = (sequelize, DataTypes) => {
 			address: DataTypes.STRING,
 			profile_pic: DataTypes.STRING,
 			ref_uuid: DataTypes.UUID,
-			referer_uuid: DataTypes.UUID
+			referer_uuid: DataTypes.UUID,
+			verified: DataTypes.BOOLEAN,
+			role: {
+				type: DataTypes.ENUM('user', 'admin'),
+				defaultValue: 'user'
+			}
 		},
 		{}
 	);
