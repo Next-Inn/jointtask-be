@@ -1,7 +1,7 @@
 {
-  "name": "mediamall-backend",
+  "name": "jointask-backend",
   "version": "1.0.0",
-  "description": "MediaMall Project for media services",
+  "description": "Join Task Project",
   "main": "index.js",
   "scripts": {
     "lint": "eslint --fix \"./src/**/*.js\"",
@@ -22,11 +22,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://bitbucket.org/kodehauzteam/mediamall-backend.git"
+    "url": "git+https://github.com/Tueloper/jointtask-be.git"
   },
   "author": "Richie Nabuk",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/kodehauzteam/mediamall-backend#readme",
+  "homepage": "https://github.com/Tueloper/jointtask-be#readme",
   "dependencies": {
     "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
