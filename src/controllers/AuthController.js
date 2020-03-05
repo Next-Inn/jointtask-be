@@ -14,8 +14,8 @@ const userToken = (user) => {
 	const { email, name, role, uuid } = user;
 	return {
 		token: createToken({
-			name,
 			uuid,
+			name,
 			email,
 			role
 		})
@@ -32,13 +32,15 @@ const AuthController = {
 			// trims the req.body to remove trailling spaces
 			const userData = magicTrimmer(req.body);
 			// destructuring user details
-			const { name, username, email, password, phone, role } = userData;
+			const { name, username, email, password, phone, address, role } = userData;
 			// validation of inputs
 			const schema = {
 				name: inValidName('Full name', name),
 				email: inValidEmail(email),
 				password: inValidPassword(password)
 			};
+
+			// return console.log(schema);
 			const validateErrors = validate(schema);
 			if (validateErrors) return sendErrorResponse(res, 422, validateErrors);
 
@@ -54,6 +56,7 @@ const AuthController = {
 				username,
 				name,
 				email,
+				address,
 				password: hashedPassword,
 				phone,
 				role:
@@ -63,14 +66,14 @@ const AuthController = {
 			});
 
 			//create a binary 64 string for user identity and save user
-			const token = await createToken(newUser);
+			const token = createToken(newUser.dataValues);
+			// return console.log(token);
 			await Token.create({
-				token,
-				user_uuid: newUser.uuid
+				user_uuid: newUser.dataValues.uuid
 			});
 
 			//send email verification mail
-			await SendMail(email, token, newUser.uuid);
+			SendMail(email, token, newUser.uuid);
 			return sendSuccessResponse(res, 201, {
 				message: 'Kindly Verify Account To Log In, Thanks!!'
 			});
@@ -79,7 +82,7 @@ const AuthController = {
 		}
 	},
 
-	async verify (req, res, next) {
+	async verifyUser (req, res, next) {
 		try {
 			// extracting the token and id from the query
 			const { token, id } = req.query;
@@ -87,8 +90,7 @@ const AuthController = {
 			const user = await verifyToken(token);
 			const userrToken = await Token.findone({
 				where: {
-					user_uuid: id || user.uuid,
-					token
+					user_uuid: id || user.uuid
 				}
 			});
 
@@ -140,10 +142,6 @@ const AuthController = {
 
 			// generate another token
 			const anotherToken = userToken(user.dataValues);
-			await Token.create({
-				token: anotherToken,
-				user_uuid: user.dataValues.uuid
-			});
 
 			await SendMail(email, anotherToken, user.dataValues.uuid);
 			return sendSuccessResponse(res, 200, 'Link Sent, Please Check your mail and Verify Accunt, Thanks!!!');
@@ -169,9 +167,10 @@ const AuthController = {
 			if (!checkPassword) return sendErrorResponse(res, 400, 'Incorrect Password');
 
 			// check user verification
-			if (!user.dataValues.verified) return sendErrorResponse(res, 401, 'Verify Your Account ');
+			// if (!user.dataValues.verified) return sendErrorResponse(res, 401, 'Verify Your Account ');
+			const token = userToken(user.dataValues);
 
-			return sendSuccessResponse(res, 200, userToken(user.dataValues));
+			return sendSuccessResponse(res, 200, token);
 		} catch (e) {
 			return next(e);
 		}
@@ -186,13 +185,7 @@ const AuthController = {
 					exclude: [
 						'password'
 					]
-				},
-				include: [
-					{
-						model: Token,
-						as: 'tokens'
-					}
-				]
+				}
 			});
 
 			return sendSuccessResponse(res, 200, profile);
@@ -201,23 +194,101 @@ const AuthController = {
 		}
 	},
 
-	async logout (req, res) {
+	// async logout (req, res, next) {
+	// 	try {
+	// 		// delete req.headers['authorization'];
+	// 		// next();
+	// 		return console.log(req.headers);
+	// 		const { token } = req;
+
+	// 		const userTokenTable = await Token.findOne({
+	// 			where: {
+	// 				user_uuid: user.uuid,
+	// 				token
+	// 			}
+	// 		});
+	// 		// return console.log(token);
+	// 		await userTokenTable.destroy();
+
+	// 		return sendSuccessResponse(res, 200, 'Succefully Logged out');
+	// 	} catch (error) {
+	// 		return sendErrorResponse(res, 400, error);
+	// 	}
+	// },
+
+	async forgetPassword (req, res, next) {
 		try {
-			const user = req.userData;
-			const { token } = req;
-
-			const userTokenTable = await Token.findOne({
-				where: {
-					user_uuid: user.uuid,
-					token
+			const { email } = req.body;
+			// check if the email exist
+			const user = await User.findOne({ where: { email } });
+			if (!!user) return sendErrorResponse(res, 500, 'User Not Found!!');
+			await User.update(
+				{ password: hashedPassword },
+				{
+					returning: true,
+					where: { email }
 				}
-			});
-			// return console.log(token);
-			await userTokenTable.destroy();
+			);
 
-			return sendSuccessResponse(res, 200, 'Succefully Logged out');
-		} catch (error) {
-			return sendErrorResponse(res, 400, error);
+			return sendSuccessResponse(res, 200, 'Password Reset Successfull ');
+		} catch (e) {
+			return next(e);
+		}
+	},
+
+	async resetPassword (req, res, next) {
+		try {
+			const { email, newPassword } = req.body;
+			const hashedPassword = hashPassword(newPassword);
+			const user = await User.findOne({ where: { email } });
+			if (!!user) return sendErrorResponse(res, 500, 'User Not Found!!');
+			await User.update(
+				{ password: hashedPassword },
+				{
+					returning: true,
+					where: { email }
+				}
+			);
+
+			return sendSuccessResponse(res, 200, 'Password Reset Successfull ');
+		} catch (e) {
+			return next(e);
+		}
+	},
+
+	async updateUser (req, res, next) {
+		try {
+			let avatar, profileDetails;
+			const user = req.userData;
+			const { name, phone, address } = req.body;
+			// if there is a image
+			if (req.file !== undefined) {
+				avatar = await uploadImage(req.file);
+				profileDetails = {
+					avatar,
+					name: name || user.name,
+					phone: phone || user.phone,
+					address: address || user.address
+				};
+			}
+			else {
+				profileDetails = {
+					name: name || user.name,
+					phone: phone || user.phone,
+					address: address || user.address
+				};
+			}
+
+			const profile = await User.update(profileDetails, {
+				returning: true,
+				where: { uuid: user.uuid }
+			});
+
+			return sendSuccessResponse(res, 200, profile);
+		} catch (e) {
+			return next(e);
 		}
 	}
 };
+
+export default AuthController;

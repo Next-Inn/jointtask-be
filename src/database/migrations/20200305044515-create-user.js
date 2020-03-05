@@ -36,7 +36,11 @@ module.exports = {
 			profile_pic: {
 				type: Sequelize.STRING
 			},
-			ref_uuid: Sequelize.UUID,
+			ref_uuid: {
+				type: Sequelize.UUID,
+				allowNull: false,
+				defaultValue: Sequelize.UUIDV4
+			},
 			referer_uuid: Sequelize.UUID,
 			verified: {
 				type: Sequelize.BOOLEAN,

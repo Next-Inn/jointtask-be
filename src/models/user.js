@@ -41,7 +41,10 @@ module.exports = (sequelize, DataTypes) => {
 			password: DataTypes.STRING,
 			address: DataTypes.STRING,
 			profile_pic: DataTypes.STRING,
-			ref_uuid: DataTypes.UUID,
+			ref_uuid: {
+				type: DataTypes.UUID,
+				defaultValue: DataTypes.UUIDV1
+			},
 			referer_uuid: DataTypes.UUID,
 			verified: DataTypes.BOOLEAN,
 			role: {
@@ -57,9 +60,9 @@ module.exports = (sequelize, DataTypes) => {
 	);
 	User.associate = function (models){
 		// associations can be defined here
-		User.hasOne(models.Token, {
+		User.hasMany(models.Token, {
 			foreignKey: 'user_uuid',
-			as: 'token',
+			as: 'tokens',
 			onDelete: 'CASADE'
 		});
 	};

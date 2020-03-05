@@ -15,8 +15,8 @@ const uploadimage = async (file, public_id = '') => {
 	const result = await cloudinary.v2.uploader.upload(content, {
 		public_id:
 
-				public_id !== '' ? `media_mall/${public_id}` :
-				`media_mall/${uuid()}`
+				public_id !== '' ? `join_task/${public_id}` :
+				`join_task/${uuid()}`
 	});
 	return result.secure_url;
 };
@@ -28,8 +28,8 @@ const uploadVideo = async (file, public_id = '') => {
 	const result = await cloudinary.v2.uploader.upload(content, {
 		public_id:
 
-				public_id !== '' ? `media_mall/${public_id}` :
-				`media_mall/${uuid()}`,
+				public_id !== '' ? `join_task/${public_id}` :
+				`join_task/${uuid()}`,
 		resource_type: 'video'
 	});
 	return result.secure_url;
@@ -42,8 +42,8 @@ const uploadAFile = async (file_name, buffer, public_id = '') => {
 	const result = await cloudinary.v2.uploader.upload(content, {
 		public_id:
 
-				public_id !== '' ? `media_mall/${public_id}` :
-				`media_mall/${uuid()}`,
+				public_id !== '' ? `join_task/${public_id}` :
+				`join_task/${uuid()}`,
 		resource_type: 'auto'
 	});
 	return result.secure_url;

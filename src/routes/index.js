@@ -1,5 +1,5 @@
 import express from 'express';
-// import user from '/user';
+import auth from './auth';
 
 export default (app) => {
 	app.use(express.json());
@@ -12,7 +12,9 @@ export default (app) => {
 		})
 	);
 
-	// app.use('/api/v1', [user]);
+	app.use('/api/v1', [
+		auth
+	]);
 
 	app.all('/*', (req, res) =>
 		res.status(404).send({
