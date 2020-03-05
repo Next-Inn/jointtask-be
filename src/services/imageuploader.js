@@ -9,45 +9,45 @@ require('../config/cloudinaryconfig');
 const duri = new Datauri();
 
 const uploadimage = async (file, public_id = '') => {
-  upload.single('file');
-  const dataUri = duri.format(path.extname(file.originalname).toString(), file.buffer);
-  const { content } = dataUri;
-  const result = await cloudinary.v2.uploader.upload(content,
-    {
-      public_id: public_id !== '' ? `media_mall/${public_id}` : `media_mall/${uuid()}`,
-      // overlay: {
-      //   font_family: 'Parisienne', font_size: 35, font_weight: 'bold', text: 'CraftZone',
-      // },
-      // color: '#990C47',
-      // y: 155,
-      // eager_async: true,
-    });
-  return result.secure_url;
+	upload.single('file');
+	const dataUri = duri.format(path.extname(file.originalname).toString(), file.buffer);
+	const { content } = dataUri;
+	const result = await cloudinary.v2.uploader.upload(content, {
+		public_id:
+
+				public_id !== '' ? `media_mall/${public_id}` :
+				`media_mall/${uuid()}`
+	});
+	return result.secure_url;
 };
 
 const uploadVideo = async (file, public_id = '') => {
-  upload.single('file');
-  const dataUri = duri.format(path.extname(file.originalname).toString(), file.buffer);
-  const { content } = dataUri;
-  const result = await cloudinary.v2.uploader.upload(content,
-    {
-      public_id: public_id !== '' ? `media_mall/${public_id}` : `media_mall/${uuid()}`,
-      resource_type: 'video',
-    });
-  return result.secure_url;
+	upload.single('file');
+	const dataUri = duri.format(path.extname(file.originalname).toString(), file.buffer);
+	const { content } = dataUri;
+	const result = await cloudinary.v2.uploader.upload(content, {
+		public_id:
+
+				public_id !== '' ? `media_mall/${public_id}` :
+				`media_mall/${uuid()}`,
+		resource_type: 'video'
+	});
+	return result.secure_url;
 };
 
 const uploadAFile = async (file_name, buffer, public_id = '') => {
-  upload.single('file');
-  const dataUri = duri.format(path.extname(file_name).toString(), buffer);
-  const { content } = dataUri;
-  const result = await cloudinary.v2.uploader.upload(content,
-    {
-      public_id: public_id !== '' ? `media_mall/${public_id}` : `media_mall/${uuid()}`,
-      resource_type: 'auto',
-    });
-  return result.secure_url;
-}
+	upload.single('file');
+	const dataUri = duri.format(path.extname(file_name).toString(), buffer);
+	const { content } = dataUri;
+	const result = await cloudinary.v2.uploader.upload(content, {
+		public_id:
+
+				public_id !== '' ? `media_mall/${public_id}` :
+				`media_mall/${uuid()}`,
+		resource_type: 'auto'
+	});
+	return result.secure_url;
+};
 
 export default uploadimage;
 
