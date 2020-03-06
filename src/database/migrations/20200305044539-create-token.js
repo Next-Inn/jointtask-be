@@ -9,12 +9,13 @@ module.exports = {
 				defaultValue: Sequelize.UUIDV4
 			},
 			user_uuid: {
-				type: Sequelize.UUID,
-				references: {
-					model: 'Users',
-					key: 'uuid',
-					as: 'user_uuid'
-				}
+				type: Sequelize.UUID
+			},
+			forgetPasswordId: {
+				type: Sequelize.STRING
+			},
+			verifyId: {
+				type: Sequelize.STRING
 			},
 			createdAt: {
 				allowNull: false,
