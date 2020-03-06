@@ -229,7 +229,7 @@ const AuthController = {
 
 	async verifyPasswordLink (req, res, next) {
 		try {
-			const { token, id, email } = req.query;
+			const { token, id, email } = req.params;
 			const verifyToken = await Token.findOne({
 				where: {
 					user_uuid: id,
