@@ -95,7 +95,7 @@ const AuthController = {
 			// extracting the token and id from the query
 			const { token, id } = req.query;
 			// verify if the token exist
-			const verifyToken = await Token.findone({
+			const verifyToken = await Token.findOne({
 				where: {
 					user_uuid: id,
 					verifyId: token
@@ -109,8 +109,9 @@ const AuthController = {
 			if (user.dataValues.verified === true) return sendErrorResponse(res, 409, 'User is Already Verified!!!');
 
 			// checking if the email link has expired
-			const { createdAT } = verifyToken.dataValues;
-			const timeDiff = checkExpiredToken(createdAT);
+			const { createdAt } = verifyToken.dataValues;
+			// return console.log(createdAt);
+			const timeDiff = checkExpiredToken(createdAt);
 			if (timeDiff !== 0) {
 				return sendErrorResponse(
 					res,
@@ -211,7 +212,7 @@ const AuthController = {
 			const { email } = req.body;
 			// check if the email exist
 			const user = await User.findOne({ where: { email } });
-			if (!!user) return sendErrorResponse(res, 500, 'User Not Found!!');
+			if (!user) return sendErrorResponse(res, 500, 'User Not Found!!');
 
 			// create a token to be sent to the user email
 			await Token.create({
@@ -227,8 +228,7 @@ const AuthController = {
 
 	async verifyPasswordLink (req, res, next) {
 		try {
-			const { token, id } = req.query;
-
+			const { token, id, email } = req.query;
 			const verifyToken = await Token.findOne({
 				where: {
 					user_uuid: id,
@@ -242,8 +242,8 @@ const AuthController = {
 			if (!user) return sendErrorResponse(res, 401, 'User is not available');
 
 			// checking if the email link has expired
-			const { createdAT } = verifyToken.dataValues;
-			const timeDiff = checkExpiredToken(createdAT);
+			const { createdAt } = verifyToken.dataValues;
+			const timeDiff = checkExpiredToken(createdAt);
 			if (timeDiff !== 0) {
 				return sendErrorResponse(
 					res,
@@ -252,7 +252,7 @@ const AuthController = {
 				);
 			}
 
-			return sendSuccessResponse(res, 200, 'User Confirmed, redirect to password reset page..');
+			return sendSuccessResponse(res, 200, { email, message: 'User Confirmed, redirect to password reset page..' });
 		} catch (e) {
 			return next(e);
 		}
@@ -263,7 +263,7 @@ const AuthController = {
 			const { email, newPassword } = req.body;
 			const hashedPassword = hashPassword(newPassword);
 			const user = await User.findOne({ where: { email } });
-			if (!!user) return sendErrorResponse(res, 500, 'User Not Found!!');
+			if (!user) return sendErrorResponse(res, 500, 'User Not Found!!');
 			await User.update(
 				{ password: hashedPassword },
 				{
@@ -282,12 +282,15 @@ const AuthController = {
 		try {
 			let avatar, profileDetails;
 			const user = req.userData;
-			const { name, phone, address } = req.body;
+			// trim the body
+			const userData = await magicTrimmer(req.body);
+			const { name, phone, address } = userData;
+
 			// if there is a image
 			if (req.file !== undefined) {
 				avatar = await uploadImage(req.file);
 				profileDetails = {
-					avatar,
+					profile_pic: avatar,
 					name: name || user.name,
 					phone: phone || user.phone,
 					address: address || user.address

@@ -10,8 +10,9 @@ userRouter.post(`/${prfx}/signup`, AuthController.signup);
 userRouter.post(`/${prfx}/signin`, AuthController.signin);
 userRouter.get(`/${prfx}/me`, Auth, AuthController.me);
 userRouter.get(`/${prfx}/verification`, AuthController.verifyUser);
-userRouter.get(`/${prfx}/forgetpassword`, AuthController.forgetPassword);
-userRouter.get(`/${prfx}/resetpassword`, AuthController.verifyPasswordLink);
+userRouter.post(`/${prfx}/forgetpassword`, AuthController.forgetPassword);
+userRouter.get(`/${prfx}/verifypassword`, AuthController.verifyPasswordLink);
+userRouter.post(`/${prfx}/resetpassword`, AuthController.resetPassword);
 userRouter.patch(`/${prfx}/updateprofile`, Auth, AuthController.updateUser);
 userRouter.post(`/${prfx}/refresh-email-token`, AuthController.getNewEmailToken);
 

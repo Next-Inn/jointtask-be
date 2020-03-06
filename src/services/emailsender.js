@@ -23,7 +23,7 @@ const sendForgotPasswordMail = (to, token, id) => {
 		from: 'admin@jointtaskfoundation.com',
 		to,
 		subject: 'Your Password Reset Link is Here',
-		text: `Hi, \n\nThis Link expires in the next 1 hour\nClick on this link to reset your password ${hostUrl}/api/v1/auth/resetpassword?token=${token}&email=${to}&id=${id}`
+		text: `Hi, \n\nThis Link expires in the next 1 hour\nClick on this link to reset your password ${hostUrl}/api/v1/auth/verifypassword?token=${token}&email=${to}&id=${id}`
 	};
 
 	transporter.sendMail(mailOptions, (error, info) => {
