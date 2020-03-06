@@ -9,7 +9,7 @@ const prfx = 'auth';
 userRouter.post(`/${prfx}/signup`, AuthController.signup);
 userRouter.post(`/${prfx}/signin`, AuthController.signin);
 userRouter.get(`/${prfx}/me`, Auth, AuthController.me);
-userRouter.get(`/${prfx}/verification`, AuthController.verifyUser);
+userRouter.get(`/${prfx}/verification/:token/:email/:id`, AuthController.verifyUser);
 userRouter.post(`/${prfx}/forgetpassword`, AuthController.forgetPassword);
 userRouter.get(`/${prfx}/verifypassword`, AuthController.verifyPasswordLink);
 userRouter.post(`/${prfx}/resetpassword`, AuthController.resetPassword);

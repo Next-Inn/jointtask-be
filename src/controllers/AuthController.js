@@ -93,7 +93,8 @@ const AuthController = {
 	async verifyUser (req, res, next) {
 		try {
 			// extracting the token and id from the query
-			const { token, id } = req.query;
+			const { token, id } = req.params;
+
 			// verify if the token exist
 			const verifyToken = await Token.findOne({
 				where: {
