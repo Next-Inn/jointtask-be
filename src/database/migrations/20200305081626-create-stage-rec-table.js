@@ -6,10 +6,6 @@ export default {
       type: Sequelize.UUID,
       defaultValue: Sequelize.UUIDV4,
     },
-    user_uuid: {
-      allowNull: false,
-      type: Sequelize.UUID,
-    },
     referrer: {
       type: Sequelize.UUID,
     },

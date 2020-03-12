@@ -7,6 +7,7 @@ export default (sequelize, DataTypes) => {
       },
       name: DataTypes.STRING,
       value: DataTypes.INTEGER,
+      price: DataTypes.INTEGER,
     });
     // Level.associate = () => {
     //   // associations can be defined here
