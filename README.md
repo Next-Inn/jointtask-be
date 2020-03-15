@@ -23,15 +23,14 @@ Joint task is a basic MLM platform
 - Add the required configuration to the `.env` file
 
 - Run `npm start`
- 
+
 
 ---
 
 ### Contributors
 
 - [Ayooluwa Olosunde](https://github.com/lovisgod)
-- [Tochuckwu Ozurumba](https://github.com/tueloper)
+- [Tochuckwu Ozurumba](https://github.com/Tueloper)
 
-`#`NextInn @ 2020
 =======
 # jointtask-be
