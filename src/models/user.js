@@ -41,9 +41,8 @@ module.exports = (sequelize, DataTypes) => {
 			password: DataTypes.STRING,
 			address: DataTypes.STRING,
 			profile_pic: DataTypes.STRING,
-			ref_uuid: {
-				type: DataTypes.UUID,
-				defaultValue: DataTypes.UUIDV1
+			referee: {
+				type: DataTypes.ARRAY(DataTypes.UUID)
 			},
 			referer_uuid: DataTypes.UUID,
 			verified: DataTypes.BOOLEAN,

@@ -31,6 +31,9 @@ const AuthController = {
 		try {
 			// get verify token
 			const verifyId = token();
+			// create user uuid
+			const user_id = token();
+			let referees;
 			// trims the req.body to remove trailling spaces
 			const userData = magicTrimmer(req.body);
 			// destructuring user details
@@ -54,7 +57,15 @@ const AuthController = {
 
 			//hash passwords and save in database
 			const hashedPassword = hashPassword(password);
+			const user_ref = await User.findOne({
+				where: { referer_uuid: refererId }
+			});
+			if (user_ref) {
+				user_ref.referee.push(user_id);
+				referees = user_ref.referee;
+			}
 			const newUser = await User.create({
+				uuid: user_id,
 				username,
 				name,
 				email,
@@ -62,6 +73,7 @@ const AuthController = {
 				password: hashedPassword,
 				phone,
 				referer_uuid: refererId,
+				referee: referees || [],
 				role:
 
 						role === 'user' ? 'user' :
@@ -79,6 +91,27 @@ const AuthController = {
 			return sendSuccessResponse(res, 201, {
 				message: 'Kindly Verify Account To Log In, Thanks!!'
 			});
+		} catch (e) {
+			return next(e);
+		}
+	},
+
+	async getAllUser (req, res, next) {
+		try {
+			const usernames = await User.findAll({
+				attributes: [
+					'username'
+				],
+				order: [
+					[
+						'username',
+						'ASC'
+					]
+				],
+				raw: true
+			});
+
+			return sendSuccessResponse(res, 200, usernames);
 		} catch (e) {
 			return next(e);
 		}
@@ -134,7 +167,7 @@ const AuthController = {
 				}
 			);
 
-			return sendSuccessResponse(res, 200, '<h2>Your Account has benn Verified Succefully</h2>');
+			return sendSuccessResponse(res, 200, '<h2>Your Account has been Verified Successfully</h2>');
 		} catch (e) {
 			return next(e);
 		}
@@ -145,7 +178,7 @@ const AuthController = {
 			const verifyId = token();
 			const { email } = req.body;
 
-			// get user and create amother token
+			// get user and create another token
 			const user = await User.findOne({ where: { email } });
 
 			if (!user) return sendErrorResponse(res, 404, 'Email not available, please check and try again');
@@ -157,7 +190,7 @@ const AuthController = {
 			});
 
 			SendMail(email, verifyId, user.dataValues.uuid);
-			return sendSuccessResponse(res, 200, 'Link Sent, Please Check your mail and Verify Accunt, Thanks!!!');
+			return sendSuccessResponse(res, 200, 'Link Sent, Please Check your mail and Verify Account, Thanks!!!');
 		} catch (e) {
 			return next(e);
 		}
