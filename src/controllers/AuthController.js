@@ -32,7 +32,7 @@ const AuthController = {
 			// get verify token
 			const verifyId = token();
 			// create user uuid
-			const user_id = token()
+			const user_id = token();
 			let referees;
 			// trims the req.body to remove trailling spaces
 			const userData = magicTrimmer(req.body);
@@ -59,10 +59,10 @@ const AuthController = {
 			const hashedPassword = hashPassword(password);
 			const user_ref = await User.findOne({
 				where: { referer_uuid: refererId }
-			})
-			if (user_ref) { 
-				user_ref.referee.push(user_id)
-				referees = user_ref.referee
+			});
+			if (user_ref) {
+				user_ref.referee.push(user_id);
+				referees = user_ref.referee;
 			}
 			const newUser = await User.create({
 				uuid: user_id,
@@ -74,7 +74,10 @@ const AuthController = {
 				phone,
 				referer_uuid: refererId,
 				referee: referees || [],
-				role:role === 'user' ? 'user' :	'admin'
+				role:
+
+						role === 'user' ? 'user' :
+						'admin'
 			});
 
 			//create a binary 64 string for user identity and save user
@@ -88,6 +91,27 @@ const AuthController = {
 			return sendSuccessResponse(res, 201, {
 				message: 'Kindly Verify Account To Log In, Thanks!!'
 			});
+		} catch (e) {
+			return next(e);
+		}
+	},
+
+	async getAllUser (req, res, next) {
+		try {
+			const usernames = await User.findAll({
+				attributes: [
+					'username'
+				],
+				order: [
+					[
+						'username',
+						'ASC'
+					]
+				],
+				raw: true
+			});
+
+			return sendSuccessResponse(res, 200, usernames);
 		} catch (e) {
 			return next(e);
 		}
