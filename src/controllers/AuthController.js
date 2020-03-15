@@ -7,6 +7,7 @@ import token from 'uuid';
 import { SendMail, sendForgotPasswordMail } from './../services/emailsender';
 import { createToken, verifyToken } from './../utils/processToken';
 import { checkExpiredToken } from './../utils/dateChecker';
+import helperMethods from './../utils/helpers';
 const { User, Token } = model;
 
 //Returns token for logged/signup in Users
@@ -37,7 +38,10 @@ const AuthController = {
 			// trims the req.body to remove trailling spaces
 			const userData = magicTrimmer(req.body);
 			// destructuring user details
-			const { name, username, email, password, phone, address, role, refererId } = userData;
+			const { name, username, email, password, phone, address, role } = userData;
+			const refererId = req.sponsorId;
+
+			// return console.log(refererId);
 			// validation of inputs
 			const schema = {
 				name: inValidName('Full name', name),
@@ -72,7 +76,10 @@ const AuthController = {
 				address,
 				password: hashedPassword,
 				phone,
-				referer_uuid: refererId,
+				referer_uuid:
+
+						refererId == undefined ? null :
+						refererId,
 				referee: referees || [],
 				role:
 
@@ -92,24 +99,14 @@ const AuthController = {
 				message: 'Kindly Verify Account To Log In, Thanks!!'
 			});
 		} catch (e) {
+			// console.log(e);
 			return next(e);
 		}
 	},
 
 	async getAllUser (req, res, next) {
 		try {
-			const usernames = await User.findAll({
-				attributes: [
-					'username'
-				],
-				order: [
-					[
-						'username',
-						'ASC'
-					]
-				],
-				raw: true
-			});
+			const usernames = await helperMethods.getAllUsers(User);
 
 			return sendSuccessResponse(res, 200, usernames);
 		} catch (e) {

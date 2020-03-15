@@ -37,7 +37,7 @@ module.exports = {
 				type: Sequelize.STRING
 			},
 			referee: {
-				type: Sequelize.Array(Sequelize.UUID),
+				type: Sequelize.ARRAY(Sequelize.UUID),
 			},
 			referer_uuid: Sequelize.UUID,
 			verified: {
