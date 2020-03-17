@@ -205,11 +205,12 @@ const helperMethods = {
 	},
 
 	// get all users
-	async getAllUsers (User) {
+	async getAllUsernameAndEmail (User) {
 		const users = await User.findAll({
 			attributes: [
 				'uuid',
-				'username'
+				'username',
+				'email'
 			],
 			order: [
 				[
