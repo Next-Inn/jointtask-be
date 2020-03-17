@@ -16,6 +16,6 @@ userRouter.get(`/${prfx}/verifypassword/:token/:email/:id`, AuthController.verif
 userRouter.post(`/${prfx}/resetpassword`, AuthController.resetPassword);
 userRouter.patch(`/${prfx}/updateprofile`, Auth, AuthController.updateUser);
 userRouter.post(`/${prfx}/refresh-email-token`, AuthController.getNewEmailToken);
-userRouter.get(`/${prfx}/usernames`, AuthController.getAllUser);
+userRouter.get(`/${prfx}/usernames/email`, AuthController.getAllUserUsernameAndEmail);
 
 export default userRouter;
