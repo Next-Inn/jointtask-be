@@ -104,9 +104,9 @@ const AuthController = {
 		}
 	},
 
-	async getAllUser (req, res, next) {
+	async getAllUserUsernameAndEmail (req, res, next) {
 		try {
-			const usernames = await helperMethods.getAllUsers(User);
+			const usernames = await helperMethods.getAllUsernameAndEmail(User);
 
 			return sendSuccessResponse(res, 200, usernames);
 		} catch (e) {
