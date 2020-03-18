@@ -205,12 +205,13 @@ const helperMethods = {
 	},
 
 	// get all users
-	async getAllUsernameAndEmail (User) {
+	async signUpValidations (User) {
 		const users = await User.findAll({
 			attributes: [
 				'uuid',
 				'username',
-				'email'
+				'email',
+				'referee'
 			],
 			order: [
 				[

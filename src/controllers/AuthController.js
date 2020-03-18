@@ -61,13 +61,7 @@ const AuthController = {
 
 			//hash passwords and save in database
 			const hashedPassword = hashPassword(password);
-			const user_ref = await User.findOne({
-				where: { referer_uuid: refererId }
-			});
-			if (user_ref) {
-				user_ref.referee.push(user_id);
-				referees = user_ref.referee;
-			}
+			// create user
 			const newUser = await User.create({
 				uuid: user_id,
 				username,
@@ -78,14 +72,35 @@ const AuthController = {
 				phone,
 				referer_uuid:
 
-						refererId == undefined ? null :
+						refererId === undefined ? null :
 						refererId,
-				referee: referees || [],
+				referee: [],
 				role:
 
 						role === 'user' ? 'user' :
 						'admin'
 			});
+
+			// when user is created
+			if (newUser.dataValues.referer_uuid !== null) {
+				// console.log('there is a referer Id');
+				const user_ref = await User.findOne({
+					where: { uuid: refererId }
+				});
+				// return console.log(user_ref.dataValues.referee);
+				user_ref.dataValues.referee.push(user_id);
+				await User.update(
+					{
+						referee: user_ref.dataValues.referee
+					},
+					{
+						where: {
+							uuid: refererId
+						}
+					}
+				);
+				await user_ref.save();
+			}
 
 			//create a binary 64 string for user identity and save user
 			await Token.create({
@@ -104,9 +119,9 @@ const AuthController = {
 		}
 	},
 
-	async getAllUserUsernameAndEmail (req, res, next) {
+	async signUpValidation (req, res, next) {
 		try {
-			const usernames = await helperMethods.getAllUsernameAndEmail(User);
+			const usernames = await helperMethods.signUpValidations(User);
 
 			return sendSuccessResponse(res, 200, usernames);
 		} catch (e) {
