@@ -7,7 +7,7 @@ import token from 'uuid';
 import { SendMail, sendForgotPasswordMail } from './../services/emailsender';
 import { createToken, verifyToken } from './../utils/processToken';
 import { checkExpiredToken } from './../utils/dateChecker';
-const { User, Token } = model;
+const { User, Token, UserAncestor } = model;
 
 //Returns token for logged/signup in Users
 const userToken = (user) => {
@@ -29,6 +29,7 @@ const AuthController = {
  */
 	async signup (req, res, next) {
 		try {
+			let user_ref = null;
 			// get verify token
 			const verifyId = token();
 			// create user uuid
@@ -57,13 +58,15 @@ const AuthController = {
 
 			//hash passwords and save in database
 			const hashedPassword = hashPassword(password);
-			const user_ref = await User.findOne({
-				where: { referer_uuid: refererId }
-			})
-			if (user_ref) { 
-				user_ref.referee.push(user_id)
-				referees = user_ref.referee
+			if (refererId) {
+			  user_ref = await User.findOne({
+			  where: { parentId: refererId }
+			 })
 			}
+			// if (user_ref !== null) { 
+			// 	user_ref.referee.push(user_id)
+			// 	referees = user_ref.referee
+			// }
 			const newUser = await User.create({
 				uuid: user_id,
 				username,
@@ -72,8 +75,8 @@ const AuthController = {
 				address,
 				password: hashedPassword,
 				phone,
-				referer_uuid: refererId,
-				referee: referees || [],
+				parentUuid: refererId,
+				// referee: referees || [],
 				role:role === 'user' ? 'user' :	'admin'
 			});
 
@@ -89,6 +92,7 @@ const AuthController = {
 				message: 'Kindly Verify Account To Log In, Thanks!!'
 			});
 		} catch (e) {
+			console.log(e);
 			return next(e);
 		}
 	},
@@ -323,7 +327,19 @@ const AuthController = {
 		} catch (e) {
 			return next(e);
 		}
-	}
+	},
+	
+	// sample hierarchy listing
+	async sample (req, res, next) {
+		try {
+			const user = req.userData;
+			const profile = await User.findAll({ hierarchy: true });;
+
+			return sendSuccessResponse(res, 200, profile);
+		} catch (e) {
+			return sendErrorResponse(res, 500, { error: e, message: 'An error occured' });
+		}
+	},
 };
 
 export default AuthController;

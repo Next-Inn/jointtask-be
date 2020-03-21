@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
+require('sequelize-hierarchy')(Sequelize);
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.js')[env];
@@ -14,6 +15,8 @@ if (config.use_env_variable) {
 } else {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
+
+// sequelize.models.UsersAncestor.sync();
 
 fs
   .readdirSync(__dirname)
