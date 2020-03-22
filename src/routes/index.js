@@ -1,5 +1,6 @@
 import express from 'express';
 import auth from './auth';
+import user from './user';
 
 export default (app) => {
 	app.use(express.json());
@@ -13,7 +14,7 @@ export default (app) => {
 	);
 
 	app.use('/api/v1', [
-		auth
+		auth, user
 	]);
 
 	app.all('/*', (req, res) =>
