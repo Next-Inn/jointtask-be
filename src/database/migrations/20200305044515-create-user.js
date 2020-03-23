@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
 	up: (queryInterface, Sequelize) => {
-		return queryInterface.createTable('Users', {
+		return queryInterface.createTable('User', {
 			uuid: {
 				allowNull: false,
 				primaryKey: true,
@@ -36,10 +36,20 @@ module.exports = {
 			profile_pic: {
 				type: Sequelize.STRING
 			},
-			referee: {
-				type: Sequelize.ARRAY(Sequelize.UUID),
-			},
-			referer_uuid: Sequelize.UUID,
+			// referee: {
+			// 	type: Sequelize.Array(Sequelize.UUID),
+			// },
+			parentId: {
+				type: Sequelize.UUID,
+				hierarchy: true
+			  },
+			parentUuid: {
+				type: Sequelize.UUID,
+				hierarchy: true
+			  },  
+			hierarchyLevel: {
+				type: Sequelize.INTEGER,
+			},  
 			verified: {
 				type: Sequelize.BOOLEAN,
 				defaultValue: false
@@ -69,9 +79,12 @@ module.exports = {
 				allowNull: false,
 				type: Sequelize.DATE
 			}
+		}, {
+			freezeTableName: true,
+			hierarchy: true
 		});
 	},
 	down: (queryInterface, Sequelize) => {
-		return queryInterface.dropTable('Users');
+		return queryInterface.dropTable('User');
 	}
 };

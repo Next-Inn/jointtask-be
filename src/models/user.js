@@ -41,10 +41,16 @@ module.exports = (sequelize, DataTypes) => {
 			password: DataTypes.STRING,
 			address: DataTypes.STRING,
 			profile_pic: DataTypes.STRING,
-			referee: {
-				type: DataTypes.ARRAY(DataTypes.UUID)
-			},
-			referer_uuid: DataTypes.UUID,
+			// referee: {
+			// 	type: DataTypes.ARRAY(DataTypes.UUID)
+			// },
+			// parentId: {
+			// 	type: DataTypes.UUID,
+			// 	hierarchy: true,
+			// },
+			parentUuid: {
+				type: DataTypes.UUID,
+			  },  
 			verified: DataTypes.BOOLEAN,
 			role: {
 				type: DataTypes.ENUM('user', 'admin'),
@@ -55,7 +61,10 @@ module.exports = (sequelize, DataTypes) => {
 				defaultValue: 'inactive'
 			}
 		},
-		{}
+		{
+		freezeTableName: true,
+		hierarchy: true
+		}
 	);
 	User.associate = function (models){
 		// associations can be defined here
@@ -64,6 +73,10 @@ module.exports = (sequelize, DataTypes) => {
 			as: 'tokens',
 			onDelete: 'CASADE'
 		});
+		// User.belongsTo(User, {as: 'parent', foreignKey: 'parentId'})
+		// User.hasMany(User, {as: 'children', foreignKey: 'parentId'})
+		// User.belongsToMany(User, {as: 'descendents', foreignKey: 'ancestorId', through: models.UserAncestor})
+		// User.belongsToMany(User, {as: 'ancestors', foreignKey: 'userId', through: models.UserAncestor})
 	};
 	return User;
 };
