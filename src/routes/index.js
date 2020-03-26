@@ -1,6 +1,7 @@
 import express from 'express';
 import auth from './auth';
 import user from './user';
+import wallet from './wallet';
 
 export default (app) => {
 	app.use(express.json());
@@ -14,7 +15,7 @@ export default (app) => {
 	);
 
 	app.use('/api/v1', [
-		auth, user
+		auth, user, wallet
 	]);
 
 	app.all('/*', (req, res) =>
