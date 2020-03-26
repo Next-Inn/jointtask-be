@@ -14,7 +14,7 @@ const { User, Token, UserAncestor } = model;
 export default {
     async getUserDownlines(req, res) {
       try {
-            const { email, email, uuid } = req.userData;
+            const { email, uuid } = req.userData;
             // const { user_uuid } = req.query;
 			const userTree = await User.findOne({ where: { uuid },
             include: {
@@ -27,5 +27,5 @@ export default {
           console.log(e);
           return sendErrorResponse(res, 500, 'An error occurred');
       }
-    }
+    },
 }

@@ -63,9 +63,9 @@ export const inValidPassword = (password) => {
 	return null;
 };
 
-export const inValidInput = (text) => {
-	if (!text) return 'Input invalid, field cannot be empty';
-	if (!/^.{4,100}$/.test(text)) return 'text should be minimum of 5 characters and maximum of 100';
+export const inValidInput = (name, text) => {
+	if (!text) return `Input invalid, ${name} cannot be empty`;
+	if (!/^.{4,100}$/.test(text)) return `${name} should be minimum of 5 characters and maximum of 100`;
 };
 
 export const emptyInput = (text) => {

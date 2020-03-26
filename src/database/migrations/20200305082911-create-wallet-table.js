@@ -16,6 +16,9 @@ export default {
     history: {
       type: Sequelize.ARRAY(Sequelize.JSON)
     },
+    reference_id: {
+      type: Sequelize.STRING
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE,

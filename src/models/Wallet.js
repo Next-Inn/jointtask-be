@@ -7,7 +7,8 @@ export default (sequelize, DataTypes) => {
       },
       user_uuid: DataTypes.UUID,
       balance: DataTypes.INTEGER,
-      history: DataTypes.ARRAY(DataTypes.JSON)
+      history: DataTypes.ARRAY(DataTypes.JSON),
+      reference_id: DataTypes.STRING
     });
     // Wallet.associate = () => {
     //   // associations can be defined here
