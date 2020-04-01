@@ -58,7 +58,7 @@ export const inValidPassword = (password) => {
 	if (password.length < 6) return 'password should be at least six characters';
 	const x = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])');
 	if (!x.test(password)) {
-		return 'password should contain at least one Uppercase letter, one lowercase letter, and at least one digit';
+		return 'password should contain at least one Uppercase letter, one lowercase letter, and at least one digit, and one special character';
 	}
 	return null;
 };

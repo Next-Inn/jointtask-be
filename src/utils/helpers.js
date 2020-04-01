@@ -12,6 +12,16 @@ const helperMethods = {
 		  });
 		  return wallet
 	},
+
+	// update a wallet by user uuid
+    async updateWalletByUserId(Wallet, uuid, newBalance) {
+		const wallet  = await Wallet.update(
+			{ balance : newBalance},
+			{where: { user_uuid: uuid }}
+			);
+		return wallet;
+	},
+
 	// find a wallet by the user id
 	async findAWalletByUser (
 		Wallet,
@@ -156,17 +166,14 @@ const helperMethods = {
 		});
 		return datas;
 	},
-
-	// get user stage
-	// async getUserStage() {
-	//  // stage one  = 6 persons who have paid
-	//  // stage two =  14 persons who have completed stage 1
-	//  // stage three = 28 persons who have completed stage 2
-	//  // stage four = 28 persons who have completed stage 3
-	//  // stage five = 28 persons who have completed stage 4
-
-	//  // if the user have 6 downlines and all have paid then the user will be promoted to stage 2
-	 
-	// }
+  async getUserDownlines(User, uuid) {
+	const dLines =await User.findOne({ where: { uuid },
+		include: {
+		  model: User,
+		  as: 'descendents',
+		  hierarchy: true
+		} });
+		return dLines;
+  }
 };
 export default helperMethods;

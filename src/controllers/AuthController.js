@@ -84,25 +84,25 @@ const AuthController = {
 			});
 
 			// when user is created
-			if (newUser.dataValues.referer_uuid !== null) {
-				// console.log('there is a referer Id');
-				const user_ref = await User.findOne({
-					where: { uuid: refererId }
-				});
-				// return console.log(user_ref.dataValues.referee);
-				user_ref.dataValues.referee.push(user_id);
-				await User.update(
-					{
-						referee: user_ref.dataValues.referee
-					},
-					{
-						where: {
-							uuid: refererId
-						}
-					}
-				);
-				await user_ref.save();
-			}
+			// if (newUser.dataValues.referer_uuid !== null) {
+			// 	// console.log('there is a referer Id');
+			// 	const user_ref = await User.findOne({
+			// 		where: { uuid: refererId }
+			// 	});
+			// 	// return console.log(user_ref.dataValues.referee);
+			// 	user_ref.dataValues.referee.push(user_id);
+			// 	await User.update(
+			// 		{
+			// 			referee: user_ref.dataValues.referee
+			// 		},
+			// 		{
+			// 			where: {
+			// 				uuid: refererId
+			// 			}
+			// 		}
+			// 	);
+			// 	await user_ref.save();
+			// }
 
 			//create a binary 64 string for user identity and save user
 			await Token.create({
@@ -111,7 +111,7 @@ const AuthController = {
 			});
 
 			//send email verification mail
-			SendMail(email, verifyId, newUser.uuid);
+			await SendMail(email, verifyId, newUser.uuid);
 			return sendSuccessResponse(res, 201, {
 				message: 'Kindly Verify Account To Log In, Thanks!!'
 			});
@@ -237,7 +237,6 @@ const AuthController = {
 					]
 				}
 			});
-
 			return sendSuccessResponse(res, 200, profile);
 		} catch (e) {
 			return next(e);
