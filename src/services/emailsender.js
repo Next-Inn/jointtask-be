@@ -1,7 +1,7 @@
 import { transporter } from '../config/nodemailer-config';
 
 const SendMail = (to, token, id) => {
-	const hostUrl = process.env.HOST_URL;
+	const hostUrl = 'https://jointtaskfoundation.com';
 	const mailOptions = {
 		from: 'admin@jointtaskfoundation.com',
 		to,
@@ -11,6 +11,7 @@ const SendMail = (to, token, id) => {
 
 	transporter.sendMail(mailOptions, (error, info) => {
 		if (error) {
+			console.log(error);
 			return 'error sending verification';
 		}
 		console.log(`Email sent: ${info.response}`);

@@ -41,6 +41,8 @@ module.exports = (sequelize, DataTypes) => {
 			password: DataTypes.STRING,
 			address: DataTypes.STRING,
 			profile_pic: DataTypes.STRING,
+			payed: DataTypes.BOOLEAN,
+			stage_completed: DataTypes.INTEGER,
 			// referee: {
 			// 	type: DataTypes.ARRAY(DataTypes.UUID)
 			// },
@@ -73,10 +75,6 @@ module.exports = (sequelize, DataTypes) => {
 			as: 'tokens',
 			onDelete: 'CASADE'
 		});
-		// User.belongsTo(User, {as: 'parent', foreignKey: 'parentId'})
-		// User.hasMany(User, {as: 'children', foreignKey: 'parentId'})
-		// User.belongsToMany(User, {as: 'descendents', foreignKey: 'ancestorId', through: models.UserAncestor})
-		// User.belongsToMany(User, {as: 'ancestors', foreignKey: 'userId', through: models.UserAncestor})
 	};
 	return User;
 };

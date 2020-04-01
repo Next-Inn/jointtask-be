@@ -8,8 +8,11 @@
 import model from './../models';
 import { validate, inValidName, inValidEmail, inValidPassword, magicTrimmer } from './../utils/validator';
 import { sendErrorResponse, sendSuccessResponse } from './../utils/sendResponse';
+import getUserStageAndReward from '../utils/StageHelper';
+import helperMethods from '../utils/helpers';
+import getUserStageAndReward from '../utils/StageHelper';
 
-const { User, Token, UserAncestor } = model;
+const { User, Token, UserAncestor, Wallet } = model;
 
 export default {
     async getUserDownlines(req, res) {
@@ -21,11 +24,31 @@ export default {
               model: User,
               as: 'descendents',
               hierarchy: true
-            } });;
+            } });
 			return sendSuccessResponse(res, 200, userTree);
       } catch (e) {
           console.log(e);
           return sendErrorResponse(res, 500, 'An error occurred');
       }
     },
-}
+
+    // calculate user stage and reward 
+    async getUserStageReward(req, res){
+      try {
+        const { email, uuid } = req.userData;
+        const downlines = await helperMethods.getUserDownlines(User, uuid);
+        const stage_reward = await getUserStageAndReward(downlines);
+        const formerBalance = await helperMethods.findAWalletByUser(Wallet, uuid);
+        const newBalance = formerBalance.balance + stage_reward.reward.balance;
+        await helperMethods.updateWalletByUserId(Wallet, uuid, newBalance);
+        await User.update(
+          { stage_completed: stage_reward.stage_completed},
+          {where: { uuid }}
+        )
+        return sendSuccessResponse(res, 200, stage_reward);
+      } catch (error) {
+        console.log(error);
+        return sendErrorResponse(res, 500, 'An error occurred');
+      }
+    }
+};
