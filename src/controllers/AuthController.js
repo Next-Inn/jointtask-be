@@ -41,7 +41,7 @@ const AuthController = {
 			const { name, username, email, password, phone, address, role, refererId } = userData;
 			// const refererId = req.sponsorId;
 
-			return console.log(refererId);
+			console.log(refererId);
 			// validation of inputs
 			const schema = {
 				name: inValidName('Full name', name),
