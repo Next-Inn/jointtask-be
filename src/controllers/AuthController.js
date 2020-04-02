@@ -38,8 +38,8 @@ const AuthController = {
 			// trims the req.body to remove trailling spaces
 			const userData = magicTrimmer(req.body);
 			// destructuring user details
-			const { name, username, email, password, phone, address, role } = userData;
-			const refererId = req.sponsorId;
+			const { name, username, email, password, phone, address, role, refererId } = userData;
+			// const refererId = req.sponsorId;
 
 			return console.log(refererId);
 			// validation of inputs
