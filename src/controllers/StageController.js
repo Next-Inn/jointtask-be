@@ -39,6 +39,7 @@ export default {
         if (downlines.children.length == 0) return sendSuccessResponse(res, 201, { stage_completed: 0, reward: { balance: 0}})
         const stage_reward = await getUserStageAndReward(downlines.children);
         const formerBalance = await helperMethods.findAWalletByUser(Wallet, uuid);
+        if (!formerBalance) return sendErrorResponse(res, 404, 'Wallet not found');
         const newBalance = formerBalance.balance + stage_reward.reward.balance;
         await helperMethods.updateWalletByUserId(Wallet, uuid, newBalance);
         await User.update(

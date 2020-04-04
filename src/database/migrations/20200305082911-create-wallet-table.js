@@ -1,5 +1,5 @@
 export default {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('Wallet', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('Wallets', {
     uuid: {
       allowNull: false,
       primaryKey: true,
@@ -29,5 +29,5 @@ export default {
     },
   }),
   // eslint-disable-next-line arrow-parens
-  down: queryInterface => queryInterface.dropTable('Wallet'),
+  down: queryInterface => queryInterface.dropTable('Wallets'),
 };
