@@ -58,6 +58,7 @@ export default {
       const createdWallet = await helperMethods.findAWalletByUuid(Wallet, wallet.uuid);
       return sendSuccessResponse(res, 200, createdWallet);
     } catch (e) {
+      console.log(e);
       return sendErrorResponse(res, 500, 'An error occurred please try again!!!');
     }
   },
