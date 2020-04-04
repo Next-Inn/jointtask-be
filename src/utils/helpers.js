@@ -173,7 +173,7 @@ const helperMethods = {
 		  as: 'descendents',
 		  hierarchy: true
 		} });
-		return dLines.children;
+		return dLines;
   }
 };
 export default helperMethods;
