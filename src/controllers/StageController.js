@@ -36,7 +36,7 @@ export default {
       try {
         const { email, uuid } = req.userData;
         const downlines = await helperMethods.getUserDownlines(User, uuid);
-        if (downlines.children.length == 0) return sendSuccessResponse(res, 404, { stage_completed: 0, reward: { balance: 0}})
+        if (downlines.children.length == 0) return sendSuccessResponse(res, 201, { stage_completed: 0, reward: { balance: 0}})
         const stage_reward = await getUserStageAndReward(downlines);
         const formerBalance = await helperMethods.findAWalletByUser(Wallet, uuid);
         const newBalance = formerBalance.balance + stage_reward.reward.balance;
