@@ -27,7 +27,7 @@ const helperMethods = {
 		Wallet,
 		uuid,
 		exclude = [
-			'refrence_id'
+			'reference_id'
 		]
 	) {
 		const wallet = await Wallet.findOne({
@@ -42,7 +42,7 @@ const helperMethods = {
 		Wallet,
 		uuid,
 		exclude = [
-			'refrence_id'
+			'reference_id'
 		]
 	) {
 		const wallet = await Wallet.findOne({
