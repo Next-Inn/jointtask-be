@@ -4,7 +4,7 @@ import Sequelize, { Op, fn, col, and } from 'sequelize';
 const helperMethods = {
 
 	// create a wallet 
-	async createUserWallet(user_uuid, recipient_id ) {
+	async createUserWallet(user_uuid, recipient_id, Wallet ) {
 		const wallet = await Wallet.create({
 			user_uuid,
 			balance: 0.0,
@@ -27,7 +27,7 @@ const helperMethods = {
 		Wallet,
 		uuid,
 		exclude = [
-			'refrence_id'
+			'reference_id'
 		]
 	) {
 		const wallet = await Wallet.findOne({
@@ -42,7 +42,7 @@ const helperMethods = {
 		Wallet,
 		uuid,
 		exclude = [
-			'refrence_id'
+			'reference_id'
 		]
 	) {
 		const wallet = await Wallet.findOne({

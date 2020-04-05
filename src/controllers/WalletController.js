@@ -54,10 +54,11 @@ export default {
       if (checkWallet) return sendErrorResponse(res, 409, 'Wallet already exist');
       const recipient_id = await createRecipient('nuban', name, role, account_number, bank_code, 'NGN');
       if (recipient_id === 'error') return sendErrorResponse(res, 500, 'An error occurred please try again!!!');
-      const wallet = await helperMethods.createUserWallet(uuid, recipient_id);
+      const wallet = await helperMethods.createUserWallet(uuid, recipient_id, Wallet);
       const createdWallet = await helperMethods.findAWalletByUuid(Wallet, wallet.uuid);
       return sendSuccessResponse(res, 200, createdWallet);
     } catch (e) {
+      console.log(e);
       return sendErrorResponse(res, 500, 'An error occurred please try again!!!');
     }
   },
