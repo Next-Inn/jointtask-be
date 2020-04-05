@@ -62,11 +62,11 @@ const AuthController = {
 			//hash passwords and save in database
 			const hashedPassword = hashPassword(password);
 			if (refererId) {
-			  user_ref = await User.findOne({
-			  where: { parentId: refererId }
-			 })
+				user_ref = await User.findOne({
+					where: { parentId: refererId }
+				});
 			}
-			// if (user_ref !== null) { 
+			// if (user_ref !== null) {
 			// 	user_ref.referee.push(user_id)
 			// 	referees = user_ref.referee
 			// }
@@ -80,7 +80,10 @@ const AuthController = {
 				phone,
 				parentUuid: refererId,
 				// referee: referees || [],
-				role:role === 'user' ? 'user' :	'admin'
+				role:
+
+						role === 'user' ? 'user' :
+						'admin'
 			});
 
 			// when user is created
@@ -351,18 +354,39 @@ const AuthController = {
 			return next(e);
 		}
 	},
-	
+
+	async signUpValidation (req, res) {
+		try {
+			const validaionDetails = await User.findAll({
+				attributes: [
+					'username',
+					'email'
+				],
+				order: [
+					[
+						'username',
+						'ASC'
+					]
+				]
+			}).map((value) => value.get({ plain: true }));
+			if (!validaionDetails) return sendErrorResponse(res, 404, { message: 'No Username Found' });
+			else return sendSuccessResponse(res, 200, validaionDetails);
+		} catch (error) {
+			return sendErrorResponse(res, 500, { message: 'An Error Occurred ' });
+		}
+	},
+
 	// sample hierarchy listing
 	async sample (req, res, next) {
 		try {
 			const user = req.userData;
-			const profile = await User.findAll({ hierarchy: true });;
+			const profile = await User.findAll({ hierarchy: true });
 
 			return sendSuccessResponse(res, 200, profile);
 		} catch (e) {
 			return sendErrorResponse(res, 500, { error: e, message: 'An error occured' });
 		}
-	},
+	}
 };
 
 export default AuthController;
