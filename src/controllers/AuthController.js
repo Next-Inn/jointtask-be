@@ -355,6 +355,18 @@ const AuthController = {
 		}
 	},
 
+	// sample hierarchy listing
+	async sample (req, res, next) {
+		try {
+			const user = req.userData;
+			const profile = await User.findAll({ hierarchy: true });
+
+			return sendSuccessResponse(res, 200, profile);
+		} catch (e) {
+			return sendErrorResponse(res, 500, { error: e, message: 'An error occured' });
+		}
+	},
+
 	async signUpValidation (req, res) {
 		try {
 			const validaionDetails = await User.findAll({
