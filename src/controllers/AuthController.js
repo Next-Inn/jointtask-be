@@ -381,7 +381,8 @@ const AuthController = {
 					]
 				]
 			}).map((value) => value.get({ plain: true }));
-			if (!validaionDetails) return sendErrorResponse(res, 404, { message: 'No Username Found' });
+			// return console.log(validaionDetails.length);
+			if (validaionDetails.length === 0) return sendErrorResponse(res, 404, { message: 'No Username Found' });
 			else return sendSuccessResponse(res, 200, validaionDetails);
 		} catch (error) {
 			return sendErrorResponse(res, 500, { message: 'An Error Occurred ' });
