@@ -344,6 +344,7 @@ const AuthController = {
 		try {
 			const validaionDetails = await User.findAll({
 				attributes: [
+					'uuid',
 					'username',
 					'email'
 				],
