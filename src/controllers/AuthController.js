@@ -148,7 +148,7 @@ const AuthController = {
 			);
 
 			// return sendSuccessResponse(res, 200, '<h2>Your Account has been Verified Successfully</h2>');
-			return res.redirect(`${process.env.HOST_URL}/user/login`);
+			return res.redirect(`${process.env.VIEW_HOST}/user/login`);
 		} catch (e) {
 			return next(e);
 		}
