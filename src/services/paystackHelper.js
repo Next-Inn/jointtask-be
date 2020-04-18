@@ -134,6 +134,30 @@ const charge = async (amount, email, authorization_code, name, pin) => {
     return { status: 'error', message: e.error.data.message };
   }
 };
+ // submit otp sent to the user for completing a transaction
+ const sendOtp = async (otp, reference) => {
+  try {
+    const options = {
+      method: 'POST',
+      uri: `${apiUrl}/charge/submit_otp`,
+      body: {
+       otp,
+       reference
+      },
+      headers: {
+        Authorization: `Bearer ${process.env.PAYSTACK_SECRET_CODE}`,
+      },
+      json: true,
+    };
+    const { data } = await rp(options);
+    console.log(data);
+    console.log(`status -> ${data.status}`, `message -> ${data.message}`);
+    if (data) return { status: data.status, message: data.message || 'Successful' };
+  } catch (e) {
+    console.log(e);
+    return 'error';
+  }
+};
 
 const transfer = async (amount, recipient) => {
   try {
@@ -188,5 +212,5 @@ const updateRecipient = async (name, email, reference_id) => {
 };
 
 module.exports = {
-  getBanks, verifyAccount, createRecipient, tokenize, charge, transfer, updateRecipient,
+  getBanks, verifyAccount, createRecipient, tokenize, charge, transfer, updateRecipient, sendOtp
 };

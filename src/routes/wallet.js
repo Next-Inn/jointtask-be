@@ -8,5 +8,6 @@ router.get('/list-banks', WalletController.listBanks)
 router.post('/verify-account-number', WalletController.verifyAccountNumber);
 router.post('/create-wallet', Auth, WalletController.createWallet);
 router.post('/initial-pay', Auth, WalletController.firstTimePayment);
+router.post('/submit-otp', Auth,WalletController.submitOtp);
 
 export default router;

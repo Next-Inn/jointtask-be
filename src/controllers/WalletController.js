@@ -6,7 +6,7 @@
 import model from './../models';
 import { validate, inValidName, inValidEmail, inValidPassword, magicTrimmer, emptyInput, inValidInput } from './../utils/validator';
 import { sendErrorResponse, sendSuccessResponse } from './../utils/sendResponse';
-import {  getBanks, verifyAccount, createRecipient, tokenize, charge } from '../services/paystackHelper';
+import {  getBanks, verifyAccount, createRecipient, tokenize, charge, sendOtp } from '../services/paystackHelper';
 import helperMethods from './../utils/helpers';
 
 const { Wallet, User } = model;
@@ -94,6 +94,34 @@ export default {
         { where: { uuid } },
       );
       return sendSuccessResponse(res, 200, `wallet loaded ${paymentStatus.message}fully`);
+    } catch (e) {
+      console.log(e);
+      return sendErrorResponse(res, 500, 'An error occurred please try again!!!');
+    }
+  },
+
+  // submit otp
+   async submitOtp(req, res) {
+    try {
+      const {
+        uuid, role, name, email,
+      } = req.userData;
+      const {
+       otp, reference
+      } = req.body;
+      const schema = {
+        otp: emptyInput(otp),
+        reference: emptyInput(reference),
+      };
+      const error = validate(schema);
+      if (error) return sendErrorResponse(res, 422, error);
+      const status = await sendOtp(otp, reference);
+      if (status.status === 'error') return sendErrorResponse(res, 400, paymentStatus.message);
+      await User.update(
+        { paid: true },
+        { where: { uuid } },
+      );
+      return sendSuccessResponse(res, 200, `${paymentStatus.message}`);
     } catch (e) {
       console.log(e);
       return sendErrorResponse(res, 500, 'An error occurred please try again!!!');
