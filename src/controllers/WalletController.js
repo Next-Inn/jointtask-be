@@ -88,6 +88,7 @@ export default {
       if (authorization_code === 'error') return sendErrorResponse(res, 400, 'An error occurred please try again!!!');
       const paymentStatus = await charge(amount, email, authorization_code, name, pin);
       if (paymentStatus.status === 'error') return sendErrorResponse(res, 400, paymentStatus.message);
+      if (paymentStatus.status == 'send_otp') return sendSuccessResponse(res, 201, paymentStatus.message)
       await User.update(
         { paid: true },
         { where: { uuid } },
