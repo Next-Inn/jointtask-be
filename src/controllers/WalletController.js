@@ -94,6 +94,7 @@ export default {
       );
       return sendSuccessResponse(res, 200, `wallet loaded ${paymentStatus.message}fully`);
     } catch (e) {
+      console.log(e);
       return sendErrorResponse(res, 500, 'An error occurred please try again!!!');
     }
   },
