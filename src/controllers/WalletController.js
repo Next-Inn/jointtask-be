@@ -6,7 +6,7 @@
 import model from './../models';
 import { validate, inValidName, inValidEmail, inValidPassword, magicTrimmer, emptyInput, inValidInput } from './../utils/validator';
 import { sendErrorResponse, sendSuccessResponse } from './../utils/sendResponse';
-import {  getBanks, verifyAccount, createRecipient, tokenize } from '../services/paystackHelper';
+import {  getBanks, verifyAccount, createRecipient, tokenize, charge } from '../services/paystackHelper';
 import helperMethods from './../utils/helpers';
 
 const { Wallet, User } = model;
