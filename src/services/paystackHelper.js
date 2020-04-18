@@ -126,7 +126,7 @@ const charge = async (amount, email, authorization_code, name, pin) => {
       json: true,
     };
     const { data } = await rp(options);
-    // console.log(data);
+    console.log(data);
     console.log(`status -> ${data.status}`, `message -> ${data.message}`);
     if (data) return { status: 'success', message: 'success' };
   } catch (e) {
