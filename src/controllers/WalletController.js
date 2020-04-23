@@ -94,7 +94,7 @@ export default {
         { paid: true },
         { where: { uuid } },
       );
-      return sendSuccessResponse(res, 200, `wallet loaded ${paymentStatus.message}fully`);
+      return sendSuccessResponse(res, 200, `wallet loaded successfully`);
     } catch (e) {
       console.log(e);
       return sendErrorResponse(res, 500, 'An error occurred please try again!!!');

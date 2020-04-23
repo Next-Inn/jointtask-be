@@ -1,10 +1,11 @@
 import model from './../models';
-import { validate, inValidName, inValidEmail, inValidPassword, magicTrimmer } from './../utils/validator';
+import { validate, inValidName, inValidEmail,
+	 inValidPassword, magicTrimmer, inValidInput } from './../utils/validator';
 import { sendErrorResponse, sendSuccessResponse } from './../utils/sendResponse';
 import { hashPassword, comparePassword } from './../utils/passwordHash';
 import uploadImage from './../services/imageuploader';
 import token from 'uuid';
-import { SendMail, sendForgotPasswordMail } from './../services/emailsender';
+import { SendMail, sendForgotPasswordMail, SendContactEmail } from './../services/emailsender';
 import { createToken, verifyToken } from './../utils/processToken';
 import { checkExpiredToken } from './../utils/dateChecker';
 const { User, Token, UserAncestor } = model;
@@ -363,6 +364,27 @@ const AuthController = {
 			return sendErrorResponse(res, 500, { error: e, message: 'An error occured' });
 		}
 	},
+
+	// contact us 
+	async sendContactUsEmail(req, res) {
+        try {
+          const {name, email, phone, message} = req.body;
+          const schema = {
+            name: inValidInput('name', name),
+            email: inValidEmail(email),
+            phone: inValidInput('phone', phone),
+            message: inValidInput('message', message)
+          };
+    
+        const error = validate(schema);
+		if (error) return sendErrorResponse(res, 422, error);
+		  await SendContactEmail(name,message, phone, email);
+          return sendSuccessResponse(res, 200, 'Email sent successfully');
+        } catch (e) {
+          console.log(e);
+          return sendErrorResponse(res, 500, 'An error occurred while sending the mail')
+        }
+      },
 };
 
 export default AuthController;

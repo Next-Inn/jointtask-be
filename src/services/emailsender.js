@@ -50,4 +50,22 @@ const SendAnyMail = (to, subject, message) => {
 	});
 };
 
-export { SendMail, sendForgotPasswordMail, SendAnyMail };
+// contact us email
+const SendContactEmail = (name, body, phone, email) => {
+	const hostUrl = 'admin@jointtaskfoundation.com';
+	const mailOptions = {
+	  from: 'admin@jointtaskfoundation.com',
+	  to: 'admin@jointtaskfoundation.com',
+	  subject: `Message From ${name}`,
+	  text: `${body} \nemail: ${email} \nphone: ${phone}`,
+	};
+  
+	transporter.sendMail(mailOptions, (error, info) => {
+	  if (error) {
+		return ('error sending verification');
+	  }
+	  console.log(`Email sent: ${info.response}`);
+	});
+  };
+
+export { SendMail, sendForgotPasswordMail, SendAnyMail, SendContactEmail };
