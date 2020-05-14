@@ -129,6 +129,7 @@ export default {
       const { uuid, name } = req.userData;
       const { accountName, accountNumber, email, amount, bank } = req.body;
       const wallet = await helperMethods.findAWalletByUser(Wallet, uuid);
+      if(!wallet)return sendErrorResponse(res, 404, 'No wallet found');
       if (parseInt(wallet.dataValues.balance, 10) >= parseInt(amount, 10)) return sendErrorResponse(res, 401, 'Low balance');
       await WithdrawRequest.create({
         user_uuid: uuid,
