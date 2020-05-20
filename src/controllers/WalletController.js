@@ -8,8 +8,9 @@ import { validate, inValidName, inValidEmail, inValidPassword, magicTrimmer, emp
 import { sendErrorResponse, sendSuccessResponse } from './../utils/sendResponse';
 import {  getBanks, verifyAccount, createRecipient, tokenize, charge, sendOtp } from '../services/paystackHelper';
 import helperMethods from './../utils/helpers';
+import { SendAnyMail } from '../services/emailsender';
 
-const { Wallet, User } = model;
+const { Wallet, User, LoanRequest, WithdrawRequest } = model;
 
 export default {
     async listBanks(req, res) {
@@ -70,7 +71,7 @@ export default {
         uuid, role, name, email,
       } = req.userData;
       const {
-        amount, cvv, expiry_month, expiry_year, number, pin,
+        amount, cvv, expiry_month, expiry_year, number, pin, reference
       } = req.body;
       const schema = {
         ammount: emptyInput(amount),
@@ -98,6 +99,51 @@ export default {
     } catch (e) {
       console.log(e);
       return sendErrorResponse(res, 500, 'An error occurred please try again!!!');
+    }
+  },
+
+  // request for loan 
+   async requestForLoan(req, res) {
+     try {
+       const { uuid, name } = req.userData;
+       const { accountName, accountNumber, email, amount, bank } = req.body;
+       await LoanRequest.create({
+         user_uuid: uuid,
+         accountName,
+         accountNumber,
+         email,
+         amount,
+         bank
+       });
+       await SendAnyMail('admin@jointtaskfoundation.com', 'LOAN REQUEST', `${name} has requested for a loan`);
+       return sendSuccessResponse(res, 200, 'Loan requested successfully'); 
+     } catch (error) {
+       console.log(error);
+       return sendErrorResponse(res, 500, 'An error occurred while requesting for loan');
+     }
+   },
+
+   // request withdrawal
+   async requestForWithdrawal(req, res) {
+    try {
+      const { uuid, name } = req.userData;
+      const { accountName, accountNumber, email, amount, bank } = req.body;
+      const wallet = await helperMethods.findAWalletByUser(Wallet, uuid);
+      if(!wallet)return sendErrorResponse(res, 404, 'No wallet found');
+      if (parseInt(wallet.dataValues.balance, 10) >= parseInt(amount, 10)) return sendErrorResponse(res, 401, 'Low balance');
+      await WithdrawRequest.create({
+        user_uuid: uuid,
+        accountName,
+        accountNumber,
+        email,
+        amount,
+        bank
+      });
+      await SendAnyMail('admin@jointtaskfoundation.com', 'WITHDRAWAL REQUEST', `${name} has requested for a withdrawal`);
+      return sendSuccessResponse(res, 200, 'Loan requested successfully'); 
+    } catch (error) {
+      console.log(error);
+      return sendErrorResponse(res, 500, 'An error occurred while requesting for loan');
     }
   },
 

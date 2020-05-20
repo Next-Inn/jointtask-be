@@ -68,4 +68,22 @@ const SendContactEmail = (name, body, phone, email) => {
 	});
   };
 
-export { SendMail, sendForgotPasswordMail, SendAnyMail, SendContactEmail };
+  // contact us email
+const SendReviewEmail = (name, body, title, phone, email) => {
+	const hostUrl = 'admin@jointtaskfoundation.com';
+	const mailOptions = {
+	  from: 'admin@jointtaskfoundation.com',
+	  to: 'admin@jointtaskfoundation.com',
+	  subject: `${title} \n Review from ${name}`,
+	  text: `${body} \nemail: ${email} \nphone: ${phone}`,
+	};
+  
+	transporter.sendMail(mailOptions, (error, info) => {
+	  if (error) {
+		return ('error sending verification');
+	  }
+	  console.log(`Email sent: ${info.response}`);
+	});
+  };
+
+export { SendMail, sendForgotPasswordMail, SendAnyMail, SendContactEmail, SendReviewEmail };
