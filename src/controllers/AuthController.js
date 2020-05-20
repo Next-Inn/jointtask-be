@@ -5,7 +5,7 @@ import { sendErrorResponse, sendSuccessResponse } from './../utils/sendResponse'
 import { hashPassword, comparePassword } from './../utils/passwordHash';
 import uploadImage from './../services/imageuploader';
 import token from 'uuid';
-import { SendMail, sendForgotPasswordMail, SendContactEmail } from './../services/emailsender';
+import { SendMail, sendForgotPasswordMail, SendContactEmail, SendReviewEmail } from './../services/emailsender';
 import { createToken, verifyToken } from './../utils/processToken';
 import { checkExpiredToken } from './../utils/dateChecker';
 const { User, Token, UserAncestor } = model;
@@ -379,6 +379,27 @@ const AuthController = {
         const error = validate(schema);
 		if (error) return sendErrorResponse(res, 422, error);
 		  await SendContactEmail(name,message, phone, email);
+          return sendSuccessResponse(res, 200, 'Email sent successfully');
+        } catch (e) {
+          console.log(e);
+          return sendErrorResponse(res, 500, 'An error occurred while sending the mail')
+        }
+	  },
+	  
+	  // user can submit a review
+	  // contact us 
+	async sendUsReview(req, res) {
+        try {
+		  const { name, email, phone } = req.userData;
+          const { title, message} = req.body;
+          const schema = {
+            title: inValidInput('title', title),
+            message: inValidInput('message', message)
+          };
+    
+        const error = validate(schema);
+		if (error) return sendErrorResponse(res, 422, error);
+		  await SendReviewEmail(name, message, title, phone, email ) 
           return sendSuccessResponse(res, 200, 'Email sent successfully');
         } catch (e) {
           console.log(e);

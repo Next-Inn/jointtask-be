@@ -71,7 +71,7 @@ export default {
         uuid, role, name, email,
       } = req.userData;
       const {
-        amount, cvv, expiry_month, expiry_year, number, pin,
+        amount, cvv, expiry_month, expiry_year, number, pin, reference
       } = req.body;
       const schema = {
         ammount: emptyInput(amount),
