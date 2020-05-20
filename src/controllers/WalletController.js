@@ -10,7 +10,7 @@ import {  getBanks, verifyAccount, createRecipient, tokenize, charge, sendOtp } 
 import helperMethods from './../utils/helpers';
 import { SendAnyMail } from '../services/emailsender';
 
-const { Wallet, User, LoanRequest, WithdrawRequest } = model;
+const { Wallet, User, LoanRequest, WithdrawRequest,PaymentRef } = model;
 
 export default {
     async listBanks(req, res) {
@@ -58,6 +58,39 @@ export default {
       const wallet = await helperMethods.createUserWallet(uuid, recipient_id, Wallet);
       const createdWallet = await helperMethods.findAWalletByUuid(Wallet, wallet.uuid);
       return sendSuccessResponse(res, 200, createdWallet);
+    } catch (e) {
+      console.log(e);
+      return sendErrorResponse(res, 500, 'An error occurred please try again!!!');
+    }
+  },
+
+  // submit payment reference
+  async SubmitPaymentRef(req, res) {
+    try {
+      const {
+        uuid
+      } = req.userData;
+      const {
+        status, reference, transaction
+      } = req.body;
+      const schema = {
+        status: emptyInput(status),
+        reference: emptyInput(reference),
+        transaction: emptyInput(transaction)
+      };
+      const error = validate(schema);
+      if (error) return sendErrorResponse(res, 422, error);
+      await PaymentRef.create({
+        user_uuid: uuid,
+        status,
+        transaction,
+        reference
+      });
+      await User.update(
+        { paid: true },
+        { where: { uuid } },
+      );
+      return sendSuccessResponse(res, 200, `wallet loaded successfully`);
     } catch (e) {
       console.log(e);
       return sendErrorResponse(res, 500, 'An error occurred please try again!!!');
