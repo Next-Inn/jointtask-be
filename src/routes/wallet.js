@@ -11,5 +11,6 @@ router.post('/initial-pay', Auth, WalletController.firstTimePayment);
 router.post('/submit-otp', Auth,WalletController.submitOtp);
 router.post('/request-loan', Auth, WalletController.requestForLoan);
 router.post('/request-withdrawal', Auth, WalletController.requestForWithdrawal);
+router.post('/payment/reference', Auth, WalletController.SubmitPaymentRef);
 
 export default router;
