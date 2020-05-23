@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
 	up: (queryInterface, Sequelize) => {
-		return queryInterface.createTable('PaymentRef', {
+		return queryInterface.createTable('PaymentRefs', {
 			uuid: {
 				allowNull: false,
 				primaryKey: true,
@@ -31,6 +31,6 @@ module.exports = {
 		});
 	},
 	down: (queryInterface, Sequelize) => {
-		return queryInterface.dropTable('PaymentRef');
+		return queryInterface.dropTable('PaymentRefs');
 	}
 };

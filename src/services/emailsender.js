@@ -1,7 +1,7 @@
 import { transporter } from '../config/nodemailer-config';
 
 const SendMail = (to, token, id) => {
-	const hostUrl = 'https://jointtaskfoundation.com';
+	const hostUrl = 'https://jointaskfoundation.herokuapp.com/';
 	const mailOptions = {
 		from: 'admin@jointtaskfoundation.com',
 		to,

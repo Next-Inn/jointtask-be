@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
 	up: (queryInterface, Sequelize) => {
-		return queryInterface.createTable('WithdrawRequest', {
+		return queryInterface.createTable('WithdrawRequests', {
 			uuid: {
 				allowNull: false,
 				primaryKey: true,
@@ -41,6 +41,6 @@ module.exports = {
 		});
 	},
 	down: (queryInterface, Sequelize) => {
-		return queryInterface.dropTable('WithdrawRequest');
+		return queryInterface.dropTable('WithdrawRequests');
 	}
 };
