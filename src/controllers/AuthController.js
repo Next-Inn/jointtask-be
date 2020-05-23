@@ -172,7 +172,7 @@ const AuthController = {
 				}
 			);
 
-			return sendSuccessResponse(res, 200, '<h2>Your Account has been Verified Successfully</h2>');
+			return sendSuccessResponse(res, 200, 'Your Account has been Verified Successfully, Please Login into your account');
 		} catch (e) {
 			return next(e);
 		}
