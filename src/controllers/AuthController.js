@@ -4,6 +4,7 @@ import { validate, inValidName, inValidEmail,
 import { sendErrorResponse, sendSuccessResponse } from './../utils/sendResponse';
 import { hashPassword, comparePassword } from './../utils/passwordHash';
 import uploadImage from './../services/imageuploader';
+import helperMethods from '../utils/helpers';
 import token from 'uuid';
 import { SendMail, sendForgotPasswordMail, SendContactEmail, SendReviewEmail } from './../services/emailsender';
 import { createToken, verifyToken } from './../utils/processToken';
@@ -405,7 +406,18 @@ const AuthController = {
           console.log(e);
           return sendErrorResponse(res, 500, 'An error occurred while sending the mail')
         }
-      },
+	  },
+	  
+	  async signUpValidation (req, res, next) {
+
+		try {		
+			const usernames = await helperMethods.signUpValidations(User);
+
+			return sendSuccessResponse(res, 200, usernames);				
+		} catch (e) {			
+			return next(e);				
+		}		
+	},		
 };
 
 export default AuthController;

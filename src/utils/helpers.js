@@ -107,7 +107,6 @@ const helperMethods = {
 				'uuid',
 				'username',
 				'email',
-				'referee'
 			],
 			order: [
 				[
