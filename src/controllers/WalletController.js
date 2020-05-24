@@ -87,7 +87,7 @@ export default {
         reference
       });
       await User.update(
-        { paid: true },
+        { payed: true },
         { where: { uuid } },
       );
       return sendSuccessResponse(res, 200, `wallet loaded successfully`);
