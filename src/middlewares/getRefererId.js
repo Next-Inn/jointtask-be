@@ -13,6 +13,7 @@ export default async (req, res, next) => {
 		}
 		const referer = await helperMethods.getAUsernameUuid(User, sponsorUserName);
 		if (!referer) return sendErrorResponse(res, 404, 'The referer you specified does not exist');
+		console.log(referer);
 		req.refererId = referer.dataValues.uuid;
 		next();
 	} catch (err) {
