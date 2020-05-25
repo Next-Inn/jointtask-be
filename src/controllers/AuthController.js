@@ -324,7 +324,7 @@ const AuthController = {
 			console.log(req.body);
 			// trim the body
 			// const userData = await magicTrimmer(req.body);
-			const { name, phone, address } = userData;
+			const { name, phone, address } = req.body;
 
 			// if there is a image
 			if (req.file !== undefined) {
