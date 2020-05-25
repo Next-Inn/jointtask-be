@@ -4,7 +4,7 @@ import Sequelize, { Op, fn, col, and } from 'sequelize';
 const helperMethods = {
 
 	// create a wallet 
-	async createUserWallet(user_uuid, recipient_id, Wallet ) {
+	async createUserWallet(user_uuid, Wallet, recipient_id= "" ) {
 		const wallet = await Wallet.create({
 			user_uuid,
 			balance: 0.0,
