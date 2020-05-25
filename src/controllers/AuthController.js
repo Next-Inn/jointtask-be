@@ -323,7 +323,7 @@ const AuthController = {
 			const user = req.userData;
 			console.log(req.body);
 			// trim the body
-			const userData = await magicTrimmer(req.body);
+			// const userData = await magicTrimmer(req.body);
 			const { name, phone, address } = userData;
 
 			// if there is a image
