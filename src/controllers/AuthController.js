@@ -160,7 +160,7 @@ const AuthController = {
 				);
 			}
 
-			//if it passess all the valication
+			//if it passes all the validation
 			await User.update(
 				{
 					verified: true,
@@ -173,7 +173,9 @@ const AuthController = {
 				}
 			);
 
-			return sendSuccessResponse(res, 200, 'Your Account has been Verified Successfully, Please Login into your account');
+			// return sendSuccessResponse(res, 200, 'Your Account has been Verified Successfully, Please Login into your account');
+			return res.redirect("https://jointtaskfoundation.netlify.app/user/login");
+
 		} catch (e) {
 			return next(e);
 		}
