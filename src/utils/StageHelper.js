@@ -98,6 +98,7 @@ const LastStageCompleted = (downlines) => {
 const getUserStageAndReward = (downlines) => {
   const stage_completed = LastStageCompleted(downlines);
   const stage = stages.filter((x) => x.stage_no == stage_completed)[0];
+  console.log(stage);
   return { stage_completed, reward:stage.reward };
 }
 
