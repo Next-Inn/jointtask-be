@@ -59,7 +59,7 @@ const stages = [
 const LastStageCompleted = (downlines) => {
   console.log(downlines)
   let stage_completed = 0;
-  const dlines = downlines.filter((x) => x.payed);
+  const dlines = downlines.filter((x) => x.dataValues.payed);
   console.log(dlines);
   if (dlines.length == 0) {
       stage_completed = 0
