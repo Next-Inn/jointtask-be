@@ -59,7 +59,6 @@ const stages = [
 const LastStageCompleted = (downlines) => {
   let stage_completed = 0;
   const dlines = downlines.filter((x) => x.dataValues.payed);
-  console.log(dlines);
   if (dlines.length == 0) {
       stage_completed = 0
       return stage_completed;
@@ -104,7 +103,6 @@ const LastStageCompleted = (downlines) => {
 const getUserStageAndReward = (downlines) => {
   // console.log(downlines);
   const stage_completed = LastStageCompleted(downlines);
-  console.log(stage_completed);
   const stage = stages.filter((x) => x.stage_no == stage_completed)[0];
   console.log(stage);
   return { stage_completed, reward:stage.reward };
