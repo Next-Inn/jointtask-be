@@ -102,7 +102,7 @@ const getUserStageAndReward = (downlines) => {
   const stage_completed = LastStageCompleted(downlines);
   console.log(stage_completed);
   const stage = stages.filter((x) => x.stage_no == stage_completed)[0];
-  // console.log(stage);
+  console.log(stage);
   return { stage_completed, reward:stage.reward };
 }
 
