@@ -1,12 +1,12 @@
 import { transporter } from '../config/nodemailer-config';
 
 const SendMail = (to, token, id) => {
-	const hostUrl = 'https://jointtaskfoundation.com';
+	const hostUrl = 'https://jointaskfoundation.herokuapp.com/';
 	const mailOptions = {
 		from: 'admin@jointtaskfoundation.com',
 		to,
 		subject: 'Welcome To Joint Task Foundation',
-		text: `Hi, \n\nThank You For Joining The Joint Task Foundation \nClick on this link to verify your email ${hostUrl}/api/v1/auth/verification/${token}/${to}/${id}`
+		text: `Hi, \n\nThank You For Joining The Joint Task Foundation \nClick on this link to verify your email ${hostUrl}api/v1/auth/verification/${token}/${to}/${id}`
 	};
 
 	transporter.sendMail(mailOptions, (error, info) => {

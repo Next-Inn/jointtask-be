@@ -4,6 +4,7 @@ import { validate, inValidName, inValidEmail,
 import { sendErrorResponse, sendSuccessResponse } from './../utils/sendResponse';
 import { hashPassword, comparePassword } from './../utils/passwordHash';
 import uploadImage from './../services/imageuploader';
+import helperMethods from '../utils/helpers';
 import token from 'uuid';
 import { SendMail, sendForgotPasswordMail, SendContactEmail, SendReviewEmail } from './../services/emailsender';
 import { createToken, verifyToken } from './../utils/processToken';
@@ -159,7 +160,7 @@ const AuthController = {
 				);
 			}
 
-			//if it passess all the valication
+			//if it passes all the validation
 			await User.update(
 				{
 					verified: true,
@@ -172,7 +173,9 @@ const AuthController = {
 				}
 			);
 
-			return sendSuccessResponse(res, 200, '<h2>Your Account has been Verified Successfully</h2>');
+			// return sendSuccessResponse(res, 200, 'Your Account has been Verified Successfully, Please Login into your account');
+			return res.redirect("https://jointtaskfoundation.netlify.app/user/login");
+
 		} catch (e) {
 			return next(e);
 		}
@@ -320,9 +323,10 @@ const AuthController = {
 		try {
 			let avatar, profileDetails;
 			const user = req.userData;
+			console.log(req.body);
 			// trim the body
-			const userData = await magicTrimmer(req.body);
-			const { name, phone, address } = userData;
+			// const userData = await magicTrimmer(req.body);
+			const { name, phone, address } = req.body;
 
 			// if there is a image
 			if (req.file !== undefined) {
@@ -349,6 +353,7 @@ const AuthController = {
 
 			return sendSuccessResponse(res, 200, profile);
 		} catch (e) {
+			console.log(e);
 			return next(e);
 		}
 	},
@@ -405,7 +410,18 @@ const AuthController = {
           console.log(e);
           return sendErrorResponse(res, 500, 'An error occurred while sending the mail')
         }
-      },
+	  },
+	  
+	  async signUpValidation (req, res, next) {
+
+		try {		
+			const usernames = await helperMethods.signUpValidations(User);
+
+			return sendSuccessResponse(res, 200, usernames);				
+		} catch (e) {			
+			return next(e);				
+		}		
+	},		
 };
 
 export default AuthController;

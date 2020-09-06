@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
 					msg: 'Please Enter Your Username'
 				},
 				unique: {
-					args: false,
+					args: true,
 					msg: 'Username Already Exist'
 				}
 			},

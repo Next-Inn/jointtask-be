@@ -80,16 +80,20 @@ export default {
       };
       const error = validate(schema);
       if (error) return sendErrorResponse(res, 422, error);
+      const checkWallet = await helperMethods.findAWalletByUser(Wallet, uuid);
+      if (checkWallet) return sendErrorResponse(res, 409, 'Wallet already exist');
       await PaymentRef.create({
         user_uuid: uuid,
         status,
         transaction,
         reference
       });
+      await helperMethods.createUserWallet(uuid, Wallet);
       await User.update(
-        { paid: true },
+        { payed: true },
         { where: { uuid } },
       );
+
       return sendSuccessResponse(res, 200, `wallet loaded successfully`);
     } catch (e) {
       console.log(e);

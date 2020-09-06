@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
 	up: (queryInterface, Sequelize) => {
-		return queryInterface.createTable('LoanRequest', {
+		return queryInterface.createTable('LoanRequests', {
 			uuid: {
 				allowNull: false,
 				primaryKey: true,
@@ -41,6 +41,6 @@ module.exports = {
 		});
 	},
 	down: (queryInterface, Sequelize) => {
-		return queryInterface.dropTable('LoanRequest');
+		return queryInterface.dropTable('LoanRequests');
 	}
 };
